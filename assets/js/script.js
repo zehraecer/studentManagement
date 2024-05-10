@@ -12,12 +12,44 @@ const lessons = document.querySelector(".lessons")
 const studentTable = document.querySelector(".studentTable")
 const students = document.querySelector(".students")
 const classAndStudents = document.querySelector(".classAndStudents")
+const statusTable = document.querySelector(".statusTable")
+
+statusTable.addEventListener("click", getStatusTable)
+classestable.addEventListener("click", getClass)
+form.addEventListener("submit", getData)
+
+
+async function getTable(element) {
+
+    let { data, error } = await _supabase.from(element).select()
+
+    if (error) { return [] }
+
+    return data
+}
+
+
+async function getStatusTable(e) {
+    e.preventDefault()
+    const user = await getTable("status")
+    const classes = await getTable('classes')
+    const student = await getTable('Students')
+
+    const z = student.filter(user => user.id)
+    const y = user.filter(user => user.id)
+    y.forEach(user => console.log(user.student_id));
+
+    const a = z.filter(user => user.id == y.forEach(user => user.student_id))
+
+    console.log(a);
+
+}
 
 studentTable.addEventListener("click", (e) => {
     e.preventDefault()
     console.log("adadad");
     if (students.style.display = "none") {
-        students.style.display = "block"
+        students.style.display = "grid"
         classEs.style.display = "none"
         classAndStudents.style.display = "none"
     } else {
@@ -25,14 +57,14 @@ studentTable.addEventListener("click", (e) => {
     }
 })
 
-classestable.addEventListener("click", getClass)
+
+
 
 
 
 async function getClass() {
     const classes = await getTable('classes')
     classEs.innerHTML = ""
-    console.log(classEs);
     if (students.style.display = "block") {
         students.style.display = "none"
         classEs.style.display = "block"
@@ -73,50 +105,69 @@ async function getclassStudents() {
     if (classAndStudents.style.display = "none") {
         students.style.display = "none"
         classEs.style.display = "none"
-        classAndStudents.style.display = "block"
+        classAndStudents.style.display = "flex"
     }
-
 
     const id = this.id
-    console.log(id);
     const x = classes.find(user => user.id == this.id)
     console.log(x);
-
     const y = student.filter(user => user.student_class == x.id)
     console.log(y);
-    for (const z of y) {
-        console.log(z);
-        classAndStudents.innerHTML += `
-            <li>${z.student_name}  ${z.student_surName} ${z.student_number} ${z.student_class}</li>
+    console.log(y);
 
+    for (const z of y) {
+        classAndStudents.innerHTML += `
+                          <form  id="${z.id}" class="statusForm">
+                            <h3>${z.student_name}  ${z.student_surName} ${z.student_number} ${z.student_class}</h3>
+                            
+
+                            <div class="statusFormDiv">
+
+                                <input type="radio" id="true" name="fav_language" value="true">
+                                 <input type="radio" id="false" name="fav_language" value="false">
+                                                                   
+                             </div>
+                                        
+                             <input type="submit" value="gönder">
+                             </form>
         `
     }
-
+    statusForm()
 }
 
 
 
-form.addEventListener("submit", getData)
+async function statusForm() {
+    const status = document.querySelectorAll(".statusForm")
+    const classes = await getTable('classes')
+    const student = await getTable('Students')
 
+    for (const statu of status) {
+        statu.addEventListener("submit", async (e) => {
+            e.preventDefault()
+            const formData = new FormData(e.target)
+            const formObj = Object.fromEntries(formData)
 
-
-async function getTable(element) {
-
-    let { data, error } = await _supabase.from(element).select()
-
-    if (error) { return [] }
-
-    return data
+            const { data, error } = await _supabase
+                .from('status')
+                .insert([
+                    {
+                        status_current: formObj.fav_language,
+                        student_id: e.target.id
+                    },
+                ])
+                .select()
+            console.log(data);
+        })
+    }
 }
+
 
 
 
 async function getStudents() {
     const students = await getTable('Students')
-    const classes = await getTable('classes')
-    const lessons = await getTable('lessons')
 
-    console.log(students);
     studentList.innerHTML = ""
     for (const student of students) {
         studentList.innerHTML +=
@@ -135,34 +186,13 @@ async function getStudents() {
             `
     }
 
-
-    // classes.map(item => {
-
-    //     students.innerHTML += `
-
-    //   <tr class="students-list-two">
-
-    //         <td>Name</td>
-    //         <td>Surname</td>
-    //         <td>numbers</td>
-    //         <td>class</td>
-
-    // </tr>
-    //   `
-
-    // })
-
-
 }
-
 
 async function getData(e) {
     e.preventDefault()
-
-
-
     const formData = new FormData(e.target)
     const formObj = Object.fromEntries(formData)
+
     const { data, error } = await _supabase
         .from('Students')
         .insert([

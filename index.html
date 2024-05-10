@@ -15,8 +15,7 @@
 
             <a href="#" class="studentTable">Student List</a>
             <a href="#" class="classesTable">Classes</a>
-            <a href="#">Lessons</a>
-            <a href="#">Status</a>
+            <a href="#" class="statusTable">Status</a>
 
 
         </div>
@@ -27,46 +26,52 @@
             <div class="students">
 
 
-                <form class="form">
+                <div class="students-form">
 
-                    <input type="text" name="student_name" id="" placeholder="Name">
-                    <input type="text" name="student_surName" id="" placeholder="surName">
-                    <input type="number" name="student_Number" id="" placeholder="Number">
-                    <select name="student_class">
+                    <form class="form">
 
-                        <option value="1">Sınıf 1</option>
-                        <option value="2">Sınıf 2</option>
-                        <option value="3">Sınıf 3</option>
+                        <input type="text" name="student_name" id="" placeholder="Name">
+                        <input type="text" name="student_surName" id="" placeholder="surName">
+                        <input type="number" name="student_Number" id="" placeholder="Number">
+                        <select name="student_class">
 
-
-                    </select>
-
-                    <button type="submit">submit</button>
+                            <option value="1">Sınıf 1</option>
+                            <option value="2">Sınıf 2</option>
+                            <option value="3">Sınıf 3</option>
 
 
-                </form>
+                        </select>
 
-                <table>
-                    <tr class="students-list-one">
-                        <th>Name</th>
-                        <th>Surname</th>
-                        <th>Number</th>
-                        <th>class</th>
+                        <button type="submit">submit</button>
 
-                    </tr>
-                </table>
 
-                <table class="students-list">
+                    </form>
+                </div>
 
-                    <tr class="students-list-two">
-                        <td>Name</td>
-                        <td>Surname</td>
-                        <td>numbers</td>
-                        <td>class</td>
+                <div class="students-table">
+                    <table>
+                        <tr class="students-list-one">
+                            <th>Name</th>
+                            <th>Surname</th>
+                            <th>Number</th>
+                            <th>class</th>
 
-                    </tr>
+                        </tr>
+                    </table>
 
-                </table>
+                    <table class="students-list">
+
+                        <tr class="students-list-two">
+                            <td>Name</td>
+                            <td>Surname</td>
+                            <td>numbers</td>
+                            <td>class</td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
 
             </div>
 
