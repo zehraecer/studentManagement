@@ -13,6 +13,7 @@ const studentTable = document.querySelector(".studentTable")
 const students = document.querySelector(".students")
 const classAndStudents = document.querySelector(".classAndStudents")
 const statusTable = document.querySelector(".statusTable")
+const statusList = document.querySelector(".statusList")
 
 statusTable.addEventListener("click", getStatusTable)
 classestable.addEventListener("click", getClass)
@@ -31,17 +32,33 @@ async function getTable(element) {
 
 async function getStatusTable(e) {
     e.preventDefault()
-    const user = await getTable("status")
-    const classes = await getTable('classes')
-    const student = await getTable('Students')
+    const users = await getTable("status");
+    const classes = await getTable('classes');
+    const student = await getTable('Students');
 
-    const z = student.filter(user => user.id)
-    const y = user.filter(user => user.id)
-    y.forEach(user => console.log(user.student_id));
 
-    const a = z.filter(user => user.id == y.forEach(user => user.student_id))
+    if (statusList.style.display = "none") {
+        statusList.style.display = "block"
+        classEs.style.display = "none"
+        classAndStudents.style.display = "none"
+        students.style.display = "none"
+    }
 
-    console.log(a);
+
+    const userStudentIds = users.map(user => user.student_id);
+    console.log(userStudentIds);
+
+    const matchedStudents = student.filter(student => userStudentIds.includes(student.id));
+
+    console.log(matchedStudents);
+    statusList.innerHTML = ""
+    for (const matchedStudent of matchedStudents) {
+        statusList.innerHTML +=
+            `
+            <li> ${matchedStudent.student_name} - ${matchedStudent.student_surName}- ${matchedStudent.student_class1}</li>
+        `
+    }
+
 
 }
 
@@ -69,6 +86,7 @@ async function getClass() {
         students.style.display = "none"
         classEs.style.display = "block"
         classAndStudents.style.display = "none"
+        statusList.style.display = "none"
     }
 
     for (const clas of classes) {
@@ -111,14 +129,13 @@ async function getclassStudents() {
     const id = this.id
     const x = classes.find(user => user.id == this.id)
     console.log(x);
-    const y = student.filter(user => user.student_class == x.id)
-    console.log(y);
+    const y = student.filter(user => user.student_class1 == x.class_name)
     console.log(y);
 
     for (const z of y) {
         classAndStudents.innerHTML += `
                           <form  id="${z.id}" class="statusForm">
-                            <h3>${z.student_name}  ${z.student_surName} ${z.student_number} ${z.student_class}</h3>
+                            <h3>${z.student_name}  ${z.student_surName} ${z.student_number} ${z.student_class1}</h3>
                             
 
                             <div class="statusFormDiv">
@@ -167,6 +184,7 @@ async function statusForm() {
 
 async function getStudents() {
     const students = await getTable('Students')
+    console.log(students);
 
     studentList.innerHTML = ""
     for (const student of students) {
@@ -178,7 +196,7 @@ async function getStudents() {
                     <td>${student.student_name}</td>
                     <td>${student.student_surName}</td>
                     <td>${student.student_number}</td>
-                    <td>${student.student_class}</td>
+                    <td>${student.student_class1}</td>
 
 
                 </tr >
@@ -192,6 +210,9 @@ async function getData(e) {
     e.preventDefault()
     const formData = new FormData(e.target)
     const formObj = Object.fromEntries(formData)
+    console.log(formObj);
+
+    const classes = await getTable('classes')
 
     const { data, error } = await _supabase
         .from('Students')
@@ -199,7 +220,7 @@ async function getData(e) {
             {
                 student_name: formObj.student_name,
                 student_surName: formObj.student_surName,
-                student_class: formObj.student_class,
+                student_class1: formObj.student_class,
                 student_number: formObj.student_Number
 
             }
